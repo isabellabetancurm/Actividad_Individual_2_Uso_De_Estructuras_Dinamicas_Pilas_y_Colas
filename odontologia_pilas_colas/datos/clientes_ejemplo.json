@@ -1,0 +1,110 @@
+[
+  {
+    "cedula": "1001",
+    "nombre": "Ana Pérez",
+    "telefono": "3001110001",
+    "tipo_cliente": "Particular",
+    "tipo_atencion": "Extracción",
+    "cantidad": 2,
+    "prioridad": "Urgente",
+    "fecha_cita": "2026-10-12",
+    "valor_total": 280000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1002",
+    "nombre": "Carlos Ruiz",
+    "telefono": "3001110002",
+    "tipo_cliente": "EPS",
+    "tipo_atencion": "Limpieza",
+    "cantidad": 1,
+    "prioridad": "Normal",
+    "fecha_cita": "2026-10-09",
+    "valor_total": 5000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1003",
+    "nombre": "Luisa Díaz",
+    "telefono": "3001110003",
+    "tipo_cliente": "Prepagada",
+    "tipo_atencion": "Extracción",
+    "cantidad": 1,
+    "prioridad": "Urgente",
+    "fecha_cita": "2026-10-09",
+    "valor_total": 40000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1004",
+    "nombre": "Juan Fernández",
+    "telefono": "3001110004",
+    "tipo_cliente": "Particular",
+    "tipo_atencion": "Diagnóstico",
+    "cantidad": 1,
+    "prioridad": "Urgente",
+    "fecha_cita": "2026-10-10",
+    "valor_total": 130000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1005",
+    "nombre": "Pedro Rivera",
+    "telefono": "3001110005",
+    "tipo_cliente": "Prepagada",
+    "tipo_atencion": "Extracción",
+    "cantidad": 3,
+    "prioridad": "Normal",
+    "fecha_cita": "2026-10-08",
+    "valor_total": 60000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1006",
+    "nombre": "Marta Gómez",
+    "telefono": "3001110006",
+    "tipo_cliente": "EPS",
+    "tipo_atencion": "Extracción",
+    "cantidad": 1,
+    "prioridad": "Urgente",
+    "fecha_cita": "2026-10-15",
+    "valor_total": 45000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1007",
+    "nombre": "Sofía Castro",
+    "telefono": "3001110007",
+    "tipo_cliente": "Particular",
+    "tipo_atencion": "Calzas",
+    "cantidad": 2,
+    "prioridad": "Normal",
+    "fecha_cita": "2026-10-08",
+    "valor_total": 240000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1008",
+    "nombre": "Andrés López",
+    "telefono": "3001110008",
+    "tipo_cliente": "EPS",
+    "tipo_atencion": "Extracción",
+    "cantidad": 2,
+    "prioridad": "Urgente",
+    "fecha_cita": "2026-10-09",
+    "valor_total": 85000,
+    "estado": "Pendiente"
+  },
+  {
+    "cedula": "1009",
+    "nombre": "Camila Ortiz",
+    "telefono": "3001110009",
+    "tipo_cliente": "Prepagada",
+    "tipo_atencion": "Calzas",
+    "cantidad": 1,
+    "prioridad": "Urgente",
+    "fecha_cita": "2026-10-11",
+    "valor_total": 40000,
+    "estado": "Pendiente"
+  }
+]
