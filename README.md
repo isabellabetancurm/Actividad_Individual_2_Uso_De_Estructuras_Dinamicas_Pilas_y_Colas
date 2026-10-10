@@ -76,34 +76,8 @@ ya esperaban.
 a estado `Atendido` y deja de aparecer en ambas estructuras. Así la Pila y la Cola
 siempre trabajan sobre las citas **pendientes**.
 
-## 5. ▶️ Cómo ejecutar
 
-Requiere Python 3.10 o superior.
-
-**Versión de consola** (no necesita instalar nada):
-
-```bash
-python main.py              # menú completo (registro + pila + cola)
-python programa_pila.py     # solo el programa de la Pila
-python programa_cola.py     # solo el programa de la Cola
-```
-
-**Versión web** (aplicación con Streamlit):
-
-```bash
-pip install -r requirements.txt
-python -m streamlit run app.py
-```
-
-> En Windows, si el comando `streamlit` no se reconoce directamente, usa siempre
-> `python -m streamlit run app.py`.
-
-Si no hay clientes guardados, se cargan automáticamente los 9 clientes de ejemplo.
-Los cambios se guardan en `datos_clientes.json` (lo comparten la versión de consola y la
-web); para volver a empezar desde los datos de ejemplo, borra ese archivo, usa la opción 3
-del menú de consola o el botón de reinicio de la app.
-
-## 5.1 🌐 La aplicación web
+## 5 🌐 La aplicación web
 
 La app usa exactamente las mismas clases que la consola (`Cliente`, `Consultorio`, `Pila`
 y `Cola`); solo cambia cómo se muestran los datos.
