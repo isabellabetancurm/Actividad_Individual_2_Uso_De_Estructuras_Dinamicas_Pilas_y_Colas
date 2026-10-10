@@ -1,14 +1,16 @@
 # 🦷 Consultorio Odontológico — Pilas y Colas
 
+**Actividad Individual N°2:  Uso de estructuras dinámicas pilas y colas**
+
+Programa en **Python** que es la continuación del programa del consultorio odontológico de la actividad 1.
+
+---
 ## 1. 📄 Introducción
 
-Actividad Individual N° 2 de Programación II: **uso de estructuras dinámicas, pilas y colas**.
-Es la continuación del programa del consultorio odontológico de la actividad 1.
-
 Un consultorio necesita un **plan de contingencia** para los clientes que tienen
-pendiente una extracción de piezas dentales y además son urgentes. Esos clientes se
-organizan en una **Pila**. Además, el consultorio atiende a diario a los clientes
-que llegan, en el estricto orden de su **agenda**, gestionada con una **Cola**.
+pendiente una extracción de piezas dentales y además son urgentes. 
+Esos clientes se organizan en una **Pila**. 
+Además, el consultorio atiende a diario a los clientes que llegan, en el estricto orden de su **agenda**, gestionada con una **Cola**.
 
 ## 2. ✅ Cómo se cumple el enunciado
 
@@ -158,9 +160,20 @@ Disponibles en la carpeta [`Capturas_app/`](./Capturas_app).
 - Las citas con fecha ya vencida también entran a la Pila (no se compara con la fecha de hoy).
 - La agenda maneja fechas, no horas: dentro de un mismo día el orden es el de registro.
 
+---
+
 ## 8. 👩‍💻 Autora
 
-Isabella Betancur Muñoz
+**Isabella Betancur Muñoz**
+Ingeniería de Sistemas — Virtual
+
+Programación II — Grupo 1 — Cohorte 263
+
+Universidad de Manizales — 2026
+
+*Facultad de Ciencias e Ingeniería - Universidad de Manizales*
+
+---
 
 ## 📜 Licencia
 
