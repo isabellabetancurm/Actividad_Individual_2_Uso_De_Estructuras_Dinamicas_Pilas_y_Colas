@@ -118,17 +118,39 @@ class Consultorio:
             print("Siguiente a llamar: " + self._describir_extraccion(self.pila_contingencia.ver_tope()))
 
     def atender_cliente_del_tope(self):
+        """Atiende al cliente del tope y lo devuelve (o None si la pila está vacía)."""
         if self.pila_contingencia.esta_vacia():
             print("No hay clientes en la pila para atender.")
-            return
+            return None
         cliente = self.pila_contingencia.desapilar()  # sale el que está en el tope
         cliente.marcar_como_atendido()
         self.guardar_clientes()
+        self._depurar_cola()  # si ese cliente también estaba en la agenda, sale de ella
         print("Atendiendo al cliente: " + self._describir_extraccion(cliente))
         if self.pila_contingencia.esta_vacia():
             print("La pila quedó vacía: plan de contingencia completado.")
         else:
             print("Siguiente en la pila: " + self._describir_extraccion(self.pila_contingencia.ver_tope()))
+        return cliente
+
+    def _depurar_pila(self):
+        """Saca de la pila a los clientes ya atendidos, conservando el orden de los demás."""
+        elementos = []
+        while not self.pila_contingencia.esta_vacia():
+            elementos.append(self.pila_contingencia.desapilar())  # del tope a la base
+        for cliente in reversed(elementos):  # se vuelve a apilar de la base al tope
+            if cliente.esta_pendiente():
+                self.pila_contingencia.apilar(cliente)
+
+    def _depurar_cola(self):
+        """Saca de la cola a los clientes ya atendidos, conservando el orden de los demás."""
+        pendientes = []
+        while not self.cola_agenda.esta_vacia():
+            cliente = self.cola_agenda.desencolar()  # del frente al final
+            if cliente.esta_pendiente():
+                pendientes.append(cliente)
+        for cliente in pendientes:  # se vuelve a encolar en el mismo orden
+            self.cola_agenda.encolar(cliente)
 
     # ------------------------------------------------------------------
     # COLA de atención: agenda del consultorio
@@ -160,17 +182,20 @@ class Consultorio:
                 f"x{cliente.cantidad}, cita {cliente.fecha_cita}, valor a pagar {cliente.valor_formateado()}")
 
     def atender_siguiente_cliente(self):
+        """Atiende al cliente del frente y lo devuelve (o None si la cola está vacía)."""
         if self.cola_agenda.esta_vacia():
             print("No hay clientes en la cola para atender.")
-            return
+            return None
         cliente = self.cola_agenda.desencolar()  # sale el que está en el frente
         cliente.marcar_como_atendido()
         self.guardar_clientes()
+        self._depurar_pila()  # si ese cliente también estaba en la pila, sale de ella
         print("Atendiendo al cliente: " + self._describir_cita(cliente))
         if self.cola_agenda.esta_vacia():
             print("La agenda quedó vacía: no hay más clientes en espera.")
         else:
             print("Siguiente en la agenda: " + self._describir_cita(self.cola_agenda.ver_frente()))
+        return cliente
 
     def consultar_siguiente_cliente_en_la_cola(self):
         if self.cola_agenda.esta_vacia():

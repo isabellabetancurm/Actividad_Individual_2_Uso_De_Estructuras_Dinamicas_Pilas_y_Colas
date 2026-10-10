@@ -16,7 +16,7 @@ trabaja por un extremo, el **tope**. Está en `estructuras/pila.py`.
 |---|---|---|
 | push | `apilar(dato)` | Pone un dato arriba, en el tope |
 | pop | `desapilar()` | Saca y devuelve el dato del tope |
-| peek | `ver_tope()` | Mira el dato del tope sin sacarlo |
+| peek | `ver_tope()` | Pregunta quién está en el tope, sin sacarlo |
 | — | `esta_vacia()` | Dice si no hay datos |
 
 **En el consultorio:** la Pila de contingencia guarda las extracciones urgentes. Se apilan
@@ -24,18 +24,39 @@ de la fecha más lejana a la más cercana para que la cita más próxima quede e
 llame primero.
 
 ## Cola (FIFO: *First In, First Out*)
-El **primero** en entrar es el **primero** en salir, como la fila de un banco. Se agrega por
-el **final** y se saca por el **frente**. Está en `estructuras/cola.py`.
+El **primero** en entrar es el **primero** en salir. Se agrega por el **final** y se saca
+por el **frente**. Está en `estructuras/cola.py`.
+
+Sirve para muchos procesos de la vida real:
+- **La fila de un banco:** la primera persona en llegar es la primera en ser atendida.
+- **Colas de trabajo:** en computación los recursos son limitados (memoria, disco, ancho de
+  banda, procesador), así que no se puede atender a todos a la vez y se atiende de a poco.
+- **Colas de impresión.**
 
 | Operación | Método | Qué hace |
 |---|---|---|
 | enqueue | `encolar(dato)` | Agrega un dato al final de la cola |
-| dequeue | `desencolar()` | Saca y devuelve el dato del frente |
-| peek | `ver_frente()` | Mira el dato del frente sin sacarlo |
+| dequeue | `desencolar()` | Saca y devuelve el dato del frente (lo atiende) |
+| peek | `ver_frente()` | Pregunta quién sigue, **sin atenderlo** |
 | — | `esta_vacia()` | Dice si no hay datos |
+
+En Python una cola suele hacerse con `collections.deque` (`append` para encolar y `popleft`
+para desencolar). Aquí se construyó a mano con nodos para mostrar cómo funciona por dentro.
 
 **En el consultorio:** la agenda es una Cola. Los clientes se atienden en estricto orden, y
 quien llega nuevo se agrega al final.
+
+## Cola sin prioridad y cola con prioridad
+- **Sin prioridad:** se atiende estrictamente por orden de llegada. Es la que usa este proyecto.
+- **Con prioridad estricta:** siempre se atiende primero a quien tiene mayor prioridad. Su
+  riesgo es la **inanición** (*starvation*): si no dejan de llegar clientes de mayor
+  prioridad, los de menor prioridad pueden no ser atendidos nunca. Una forma de evitarlo es
+  rotar los turnos entre las colas (*Round Robin*).
+
+**Por qué la agenda de este proyecto es sin prioridad:** el enunciado pide atender los
+clientes "en el estricto orden que define la agenda", así que nadie se salta la fila. La
+prioridad "Urgente" solo se usa como **filtro** para decidir quién entra a la Pila de
+contingencia; no cambia el orden de la Cola.
 
 ## Costo de las operaciones
 Todas las operaciones de la Pila y de la Cola son de **tiempo constante, O(1)**: solo tocan
