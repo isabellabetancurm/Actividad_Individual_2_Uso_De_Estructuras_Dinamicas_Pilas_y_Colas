@@ -27,7 +27,7 @@ Además, el consultorio atiende a diario a los clientes que llegan, en el estric
 ## 3. 📁 Estructura del proyecto
 
 ```
-Actividad_Individual_2_Pilas_y_Colas/
+Actividad_Individual_2_Uso_De_Estructuras_Dinamicas_Pilas_y_Colas/
 ├── estructuras/
 │   ├── __init__.py
 │   ├── nodo.py              # Nodo: dato + referencia al siguiente
