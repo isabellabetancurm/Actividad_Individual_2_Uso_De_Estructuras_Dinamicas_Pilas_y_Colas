@@ -7,7 +7,7 @@ Reutiliza exactamente las mismas clases que la versión de consola
 Ejecutar con:  python -m streamlit run app.py
 """
 
-from datetime import date
+from datetime import date, time
 
 import streamlit as st
 
@@ -74,6 +74,12 @@ def accion_registrar_cliente():
     if cedula == "" or nombre == "" or telefono == "":
         avisar("error", "La cédula, el nombre y el teléfono no pueden estar vacíos.")
         return
+    if s.consultorio.tiene_cita_pendiente(cedula):
+        avisar("error", f"Ya hay un cliente con una cita pendiente con la cédula {cedula}.")
+        return
+    if s.f_fecha < date.today():
+        avisar("error", "La fecha de la cita no puede ser anterior a hoy.")
+        return
 
     tipo_atencion = s.f_tipo_atencion
     if tipo_atencion in ("Limpieza", "Diagnóstico"):
@@ -82,7 +88,7 @@ def accion_registrar_cliente():
         cantidad = int(s.f_cantidad)
 
     cliente = Cliente(cedula, nombre, telefono, s.f_tipo_cliente, tipo_atencion,
-                      cantidad, s.f_prioridad, s.f_fecha.isoformat())
+                      cantidad, s.f_prioridad, s.f_fecha.isoformat(), s.f_hora.strftime("%H:%M"))
     consultorio = s.consultorio
     consultorio.registrar_cliente(cliente)
     consultorio.agregar_cliente_a_cola(cliente)       # el cliente nuevo entra por el FINAL de la cola
@@ -116,7 +122,8 @@ def filas_pila(consultorio):
         else:
             posicion = "│"
         filas.append({"Posición": posicion, "Cédula": c.cedula, "Nombre": c.nombre,
-                      "Teléfono": c.telefono, "Fecha cita": c.fecha_cita, "Piezas": c.cantidad})
+                      "Teléfono": c.telefono, "Fecha cita": c.fecha_cita, "Hora": c.hora_cita,
+                      "Piezas": c.cantidad})
     return filas
 
 
@@ -132,14 +139,15 @@ def filas_cola(consultorio):
             turno = str(i + 1)
         filas.append({"Turno": turno, "Cédula": c.cedula, "Nombre": c.nombre, "Atención": c.tipo_atencion,
                       "Cant.": c.cantidad, "Prioridad": c.prioridad, "Fecha cita": c.fecha_cita,
-                      "Valor": c.valor_formateado()})
+                      "Hora": c.hora_cita, "Valor": c.valor_formateado()})
     return filas
 
 
 def filas_clientes(consultorio):
     return [{"Cédula": c.cedula, "Nombre": c.nombre, "Tipo de cliente": c.tipo_cliente,
              "Atención": c.tipo_atencion, "Cant.": c.cantidad, "Prioridad": c.prioridad,
-             "Fecha cita": c.fecha_cita, "Estado": c.estado, "Valor": c.valor_formateado()}
+             "Fecha cita": c.fecha_cita, "Hora": c.hora_cita, "Estado": c.estado,
+             "Valor": c.valor_formateado()}
             for c in consultorio.clientes]
 
 
@@ -170,9 +178,11 @@ with st.sidebar:
                         key="f_cantidad")  # sin 'value': por defecto arranca en el mínimo (1)
         st.selectbox("Prioridad", PRIORIDADES, key="f_prioridad")
         st.date_input("Fecha de la cita", value=date.today(), key="f_fecha")
+        st.time_input("Hora de la cita", value=time(8, 0), key="f_hora")
         st.form_submit_button("Registrar cliente", type="primary", key="f_enviar",
                               on_click=accion_registrar_cliente)
-    st.caption("Para Limpieza y Diagnóstico la cantidad se fija en 1.")
+    st.caption("Para Limpieza y Diagnóstico la cantidad se fija en 1. Una cédula solo puede tener una cita "
+               "pendiente y la fecha no puede ser anterior a hoy.")
 
     st.divider()
     st.button("🔄 Reiniciar con los datos de ejemplo", key="btn_reiniciar", on_click=accion_reiniciar)
@@ -227,8 +237,8 @@ with tab_pila:
 with tab_cola:
     cola = consultorio.cola_agenda
     st.subheader("Agenda del consultorio")
-    st.caption("Los clientes pendientes se atienden en estricto orden de la agenda: por fecha de cita y, a igual "
-               "fecha, por orden de registro. Quien llega nuevo entra al final "
+    st.caption("Los clientes pendientes se atienden en estricto orden de la agenda: por fecha y hora de la cita y, "
+               "si coinciden, por orden de registro. Quien llega nuevo entra al final "
                "(FIFO: el primero en entrar es el primero en salir).")
 
     total_a_recaudar = sum(c.valor_total for c in cola)

@@ -13,6 +13,7 @@ PRECIOS = {
 TIPOS_CLIENTE = list(PRECIOS.keys())
 TIPOS_ATENCION = ["Limpieza", "Calzas", "Extracción", "Diagnóstico"]
 PRIORIDADES = ["Normal", "Urgente"]
+HORA_POR_DEFECTO = "08:00"  # para datos antiguos que no traen hora
 
 
 def formato_pesos(valor):
@@ -23,7 +24,7 @@ def formato_pesos(valor):
 class Cliente:
 
     def __init__(self, cedula, nombre, telefono, tipo_cliente, tipo_atencion,
-                 cantidad, prioridad, fecha_cita, estado="Pendiente"):
+                 cantidad, prioridad, fecha_cita, hora_cita=HORA_POR_DEFECTO, estado="Pendiente"):
         self.cedula = cedula
         self.nombre = nombre
         self.telefono = telefono
@@ -32,6 +33,7 @@ class Cliente:
         self.cantidad = cantidad
         self.prioridad = prioridad
         self.fecha_cita = fecha_cita  # texto con formato YYYY-MM-DD
+        self.hora_cita = hora_cita    # texto con formato HH:MM (24 horas)
         self.estado = estado          # "Pendiente" o "Atendido"
         self.valor_total = self.calcular_valor_total()
 
@@ -44,6 +46,10 @@ class Cliente:
     def obtener_fecha(self):
         """Devuelve la fecha de la cita como objeto date (para poder compararla)."""
         return datetime.strptime(self.fecha_cita, "%Y-%m-%d").date()
+
+    def obtener_momento(self):
+        """Devuelve la fecha y la hora de la cita juntas (para ordenar la agenda)."""
+        return datetime.strptime(f"{self.fecha_cita} {self.hora_cita}", "%Y-%m-%d %H:%M")
 
     def esta_pendiente(self):
         return self.estado == "Pendiente"
@@ -65,6 +71,7 @@ class Cliente:
             "cantidad": self.cantidad,
             "prioridad": self.prioridad,
             "fecha_cita": self.fecha_cita,
+            "hora_cita": self.hora_cita,
             "valor_total": self.valor_total,
             "estado": self.estado,
         }
@@ -75,5 +82,6 @@ class Cliente:
         return Cliente(
             datos["cedula"], datos["nombre"], datos["telefono"],
             datos["tipo_cliente"], datos["tipo_atencion"], datos["cantidad"],
-            datos["prioridad"], datos["fecha_cita"], datos.get("estado", "Pendiente"),
+            datos["prioridad"], datos["fecha_cita"],
+            datos.get("hora_cita", HORA_POR_DEFECTO), datos.get("estado", "Pendiente"),
         )

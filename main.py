@@ -7,9 +7,10 @@
     - Pila de contingencia: extracciones urgentes, por fecha (programa_pila.py)
     - Cola de atención: agenda del consultorio (programa_cola.py)
     - Persistencia de los clientes en datos_clientes.json
+    - Validaciones al registrar: cédula sin cita pendiente repetida, fecha no
+      anterior a hoy y hora en formato HH:MM
 - Qué problemas/errores (BUGS) tiene:
-    B-1. No se valida que la cédula no esté repetida entre clientes
-    B-2. Los datos viven en un archivo JSON y no en una base de datos
+    Ninguno conocido.
 """
 
 import programa_cola
@@ -33,7 +34,7 @@ def main():
         opcion = input("Elija una opción: ").strip()
 
         if opcion == "1":
-            consultorio.registrar_cliente(capturar_cliente())
+            consultorio.registrar_cliente(capturar_cliente(consultorio.cedulas_con_cita_pendiente()))
             print("Cliente registrado y guardado.")
         elif opcion == "2":
             print()

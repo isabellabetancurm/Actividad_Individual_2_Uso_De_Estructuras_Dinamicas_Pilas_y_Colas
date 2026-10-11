@@ -3,14 +3,14 @@
 - Versión: v1.0
 - Qué incluye:
     - Estructura dinámica: Cola (FIFO) implementada con nodos enlazados
-    - Agenda: los clientes pendientes quedan en la cola por fecha de cita
-      (la más cercana primero) y, a igual fecha, por orden de registro
+    - Agenda: los clientes pendientes quedan en la cola por fecha y hora de
+      la cita (la más cercana primero) y, si coinciden, por orden de registro
     - Atención en estricto orden de la agenda (desencolar)
     - Llegada de clientes nuevos: se agregan al final de la cola (encolar)
+    - Validaciones al registrar: cédula sin cita pendiente repetida, fecha no
+      anterior a hoy y hora en formato HH:MM
 - Qué problemas/errores (BUGS) tiene:
-    B-1. No se valida que la cédula no esté repetida entre clientes
-    B-2. La agenda no maneja horas, solo fechas: dentro de un mismo día el
-         orden es el de registro
+    Ninguno conocido.
 """
 
 from consultorio import Consultorio
@@ -34,7 +34,7 @@ def ejecutar(consultorio):
 
         if opcion == "1":
             print("Vamos a registrar un cliente en la cola")
-            cliente = capturar_cliente()
+            cliente = capturar_cliente(consultorio.cedulas_con_cita_pendiente())
             consultorio.registrar_cliente(cliente)          # queda guardado en la lista de clientes
             consultorio.agregar_cliente_a_cola(cliente)     # y entra por el final de la cola
             print(f"Cliente registrado. Quedó en el turno nº {len(consultorio.cola_agenda)} de la agenda.")

@@ -4,13 +4,11 @@
 - Qué incluye:
     - Estructura dinámica: Pila (LIFO) implementada con nodos enlazados
     - Filtro de clientes: solo extracción dental + prioridad "Urgente" + cita pendiente
-    - Ordenamiento por fecha: la fecha más cercana queda en el TOPE de la pila
+    - Ordenamiento por fecha y hora: la cita más cercana queda en el TOPE de la pila
     - Informe de la Pila (en pantalla y guardado en informe_pila.txt)
     - Atención de la Pila: se llama primero al cliente del tope (desapilar)
 - Qué problemas/errores (BUGS) tiene:
-    B-1. No se valida que la cédula no esté repetida entre clientes
-    B-2. Las citas con fecha ya vencida también entran a la pila (no se
-         compara contra la fecha de hoy)
+    Ninguno conocido.
 """
 
 from consultorio import Consultorio

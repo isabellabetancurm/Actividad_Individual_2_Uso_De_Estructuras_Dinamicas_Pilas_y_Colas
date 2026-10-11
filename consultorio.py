@@ -27,7 +27,16 @@ class Consultorio:
     # ------------------------------------------------------------------
     # Registro y consulta de clientes
     # ------------------------------------------------------------------
+    def cedulas_con_cita_pendiente(self):
+        return {c.cedula for c in self.clientes if c.esta_pendiente()}
+
+    def tiene_cita_pendiente(self, cedula):
+        return cedula in self.cedulas_con_cita_pendiente()
+
     def registrar_cliente(self, cliente):
+        """Registra al cliente. Una cédula solo puede tener una cita pendiente a la vez."""
+        if self.tiene_cita_pendiente(cliente.cedula):
+            raise ValueError(f"Ya hay un cliente con una cita pendiente con la cédula {cliente.cedula}.")
         self.clientes.append(cliente)
         self.guardar_clientes()
 
@@ -36,11 +45,11 @@ class Consultorio:
             print("No hay clientes registrados.")
             return
         print(f"{'Nº':<4}{'Cédula':<12}{'Nombre':<22}{'Atención':<13}{'Cant.':<6}"
-              f"{'Prioridad':<10}{'Fecha':<12}{'Estado':<10}{'Valor':>11}")
-        print("-" * 100)
+              f"{'Prioridad':<10}{'Fecha':<12}{'Hora':<7}{'Estado':<10}{'Valor':>11}")
+        print("-" * 107)
         for numero, c in enumerate(self.clientes, start=1):
             print(f"{numero:<4}{c.cedula:<12}{c.nombre[:21]:<22}{c.tipo_atencion:<13}{c.cantidad:<6}"
-                  f"{c.prioridad:<10}{c.fecha_cita:<12}{c.estado:<10}{c.valor_formateado():>11}")
+                  f"{c.prioridad:<10}{c.fecha_cita:<12}{c.hora_cita:<7}{c.estado:<10}{c.valor_formateado():>11}")
 
     # ------------------------------------------------------------------
     # PILA de contingencia: extracciones urgentes
@@ -59,15 +68,15 @@ class Consultorio:
 
         En una pila sale primero lo último que se apiló. Para que el cliente
         con la fecha MÁS CERCANA quede en el tope (y sea el primero en ser
-        llamado), se apila de la fecha más lejana a la más cercana. Si dos
-        clientes tienen la misma fecha, se llama primero al que se registró antes.
+        llamado), se apila de la cita más lejana a la más cercana (fecha y hora).
+        Si dos citas coinciden exactamente, se llama primero al que se registró antes.
         """
         candidatos = []
         for posicion, cliente in enumerate(self.clientes):
             if self.es_candidato_a_la_pila(cliente):
-                candidatos.append((cliente.obtener_fecha(), posicion, cliente))
+                candidatos.append((cliente.obtener_momento(), posicion, cliente))
 
-        # Orden descendente por (fecha, posición): el último en apilarse es el primero en salir
+        # Orden descendente por (fecha y hora, posición): el último en apilarse es el primero en salir
         candidatos.sort(key=lambda dato: (dato[0], dato[1]), reverse=True)
 
         self.pila_contingencia = Pila()
@@ -76,14 +85,14 @@ class Consultorio:
 
     def generar_informe_de_la_pila(self):
         """Arma el informe de la Pila para que en la clínica llamen a los clientes."""
-        linea = "=" * 78
+        linea = "=" * 80
         lineas = [
             linea,
             f" INFORME DE LA PILA DE CONTINGENCIA - {self.nombre.upper()}",
             linea,
             f"Generado: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
             "Criterios: extracción dental + prioridad Urgente + cita pendiente",
-            "Orden: fecha de la cita de la más cercana a la más lejana",
+            "Orden: fecha y hora de la cita, de la más cercana a la más lejana",
             "(el cliente nº 1 está en el TOPE de la pila: es el primero en ser llamado)",
             f"Total de clientes en la pila: {len(self.pila_contingencia)}",
             "",
@@ -91,12 +100,12 @@ class Consultorio:
         if self.pila_contingencia.esta_vacia():
             lineas.append("No hay clientes que cumplan los criterios.")
         else:
-            lineas.append(f"{'Nº':<4}{'Cédula':<13}{'Nombre':<24}{'Teléfono':<13}{'Fecha cita':<12}{'Piezas':>6}")
-            lineas.append("-" * 78)
+            lineas.append(f"{'Nº':<4}{'Cédula':<13}{'Nombre':<24}{'Teléfono':<13}{'Fecha cita':<12}{'Hora':<7}{'Piezas':>6}")
+            lineas.append("-" * 80)
             for numero, c in enumerate(self.pila_contingencia, start=1):  # del tope a la base, sin desapilar
                 lineas.append(
                     f"{numero:<4}{c.cedula:<13}{c.nombre[:23]:<24}{c.telefono:<13}"
-                    f"{c.fecha_cita:<12}{c.cantidad:>6}"
+                    f"{c.fecha_cita:<12}{c.hora_cita:<7}{c.cantidad:>6}"
                 )
         lineas.append(linea)
         return "\n".join(lineas)
@@ -109,7 +118,7 @@ class Consultorio:
     @staticmethod
     def _describir_extraccion(cliente):
         return (f"{cliente.nombre} (cédula {cliente.cedula}, tel. {cliente.telefono}) - "
-                f"extracción de {cliente.cantidad} pieza(s), cita {cliente.fecha_cita}")
+                f"extracción de {cliente.cantidad} pieza(s), cita {cliente.fecha_cita} {cliente.hora_cita}")
 
     def consultar_cliente_del_tope(self):
         if self.pila_contingencia.esta_vacia():
@@ -158,13 +167,13 @@ class Consultorio:
     def generar_agenda(self):
         """Genera la Cola con los clientes pendientes.
 
-        El orden de la agenda es: fecha de la cita (la más cercana primero) y,
-        si hay empate, el orden en que se registraron los clientes.
+        El orden de la agenda es: fecha y hora de la cita (la más cercana primero)
+        y, si coinciden exactamente, el orden en que se registraron los clientes.
         """
         pendientes = []
         for posicion, cliente in enumerate(self.clientes):
             if cliente.esta_pendiente():
-                pendientes.append((cliente.obtener_fecha(), posicion, cliente))
+                pendientes.append((cliente.obtener_momento(), posicion, cliente))
 
         pendientes.sort(key=lambda dato: (dato[0], dato[1]))
 
@@ -179,7 +188,8 @@ class Consultorio:
     @staticmethod
     def _describir_cita(cliente):
         return (f"{cliente.nombre} (cédula {cliente.cedula}) - {cliente.tipo_atencion} "
-                f"x{cliente.cantidad}, cita {cliente.fecha_cita}, valor a pagar {cliente.valor_formateado()}")
+                f"x{cliente.cantidad}, cita {cliente.fecha_cita} {cliente.hora_cita}, "
+                f"valor a pagar {cliente.valor_formateado()}")
 
     def atender_siguiente_cliente(self):
         """Atiende al cliente del frente y lo devuelve (o None si la cola está vacía)."""
@@ -207,15 +217,15 @@ class Consultorio:
         if self.cola_agenda.esta_vacia():
             print("La agenda está vacía: no hay clientes en espera.")
             return
-        print(f"{'Turno':<7}{'Cédula':<12}{'Nombre':<22}{'Atención':<13}{'Cant.':<6}{'Prioridad':<10}{'Fecha':<12}")
-        print("-" * 82)
+        print(f"{'Turno':<7}{'Cédula':<12}{'Nombre':<22}{'Atención':<13}{'Cant.':<6}{'Prioridad':<10}{'Fecha':<12}{'Hora':<7}")
+        print("-" * 89)
         total_clientes_pendientes = 0
         total_valor_pendiente = 0
         for c in self.cola_agenda:  # del frente al final, sin desencolar
             total_clientes_pendientes += 1
             total_valor_pendiente = total_valor_pendiente + c.valor_total
             print(f"{total_clientes_pendientes:<7}{c.cedula:<12}{c.nombre[:21]:<22}{c.tipo_atencion:<13}"
-                  f"{c.cantidad:<6}{c.prioridad:<10}{c.fecha_cita:<12}")
+                  f"{c.cantidad:<6}{c.prioridad:<10}{c.fecha_cita:<12}{c.hora_cita:<7}")
         print(f"Total de clientes en espera: {total_clientes_pendientes}")
         print(f"Total a recaudar: {formato_pesos(total_valor_pendiente)}")
 
