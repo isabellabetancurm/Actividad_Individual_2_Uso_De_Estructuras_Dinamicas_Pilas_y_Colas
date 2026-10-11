@@ -9,7 +9,8 @@
     "prioridad": "Urgente",
     "fecha_cita": "2026-10-12",
     "valor_total": 280000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "10:30"
   },
   {
     "cedula": "1002",
@@ -21,7 +22,8 @@
     "prioridad": "Normal",
     "fecha_cita": "2026-10-09",
     "valor_total": 5000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "08:00"
   },
   {
     "cedula": "1003",
@@ -33,7 +35,8 @@
     "prioridad": "Urgente",
     "fecha_cita": "2026-10-09",
     "valor_total": 40000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "09:00"
   },
   {
     "cedula": "1004",
@@ -45,7 +48,8 @@
     "prioridad": "Urgente",
     "fecha_cita": "2026-10-10",
     "valor_total": 130000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "08:30"
   },
   {
     "cedula": "1005",
@@ -57,7 +61,8 @@
     "prioridad": "Normal",
     "fecha_cita": "2026-10-08",
     "valor_total": 60000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "08:00"
   },
   {
     "cedula": "1006",
@@ -69,7 +74,8 @@
     "prioridad": "Urgente",
     "fecha_cita": "2026-10-15",
     "valor_total": 45000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "14:00"
   },
   {
     "cedula": "1007",
@@ -81,7 +87,8 @@
     "prioridad": "Normal",
     "fecha_cita": "2026-10-08",
     "valor_total": 240000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "09:30"
   },
   {
     "cedula": "1008",
@@ -93,7 +100,8 @@
     "prioridad": "Urgente",
     "fecha_cita": "2026-10-09",
     "valor_total": 85000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "10:00"
   },
   {
     "cedula": "1009",
@@ -105,6 +113,7 @@
     "prioridad": "Urgente",
     "fecha_cita": "2026-10-11",
     "valor_total": 40000,
-    "estado": "Pendiente"
+    "estado": "Pendiente",
+    "hora_cita": "11:00"
   }
 ]
